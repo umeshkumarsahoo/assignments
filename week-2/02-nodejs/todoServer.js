@@ -43,7 +43,51 @@
   const bodyParser = require('body-parser');
   
   const app = express();
-  
+  const todo=[];
   app.use(bodyParser.json());
+app.get('/todo',function(req,res){
+  res.status(200).json(todo);
+})
+   app.get('/todo',function(req,res){
+     const todoId=parseInt(req.params.id);
+     const todo=todo.find(e=>e.id===todoId);
+     if(!todo)
+       return res.status(404).send("no todo present");
+     res.status(200).json(todo);
+   });
+app.post('/todo/:todolist',function(req,res){
+  const newTodo={
+    id:Math.floor(Math.random()*100),
+    title:req.body.title,
+    completed: false,
+    description:req.body.desc,
+  }
+  todo.push(newTodo);
+  res.status(200).json(todo);
+})
+app.put('/todo/:todoList' , function(req,res){
+  const todoIndex=todo.findIndex(e=>e.id===parseInt(req.params.id);
+  if(todoIndex===-1)
+    res.status(404).send("json not found");
+  else{
+    todo[todoIndex].title=req.body.title;
+    todo[todoIndex].description=req.body.description;
+    res.status(200).json(todo[todoIndex]); 
+  }
+}) 
+app.delete('/todo/:todoList' , function(req,res){
+  const todoIndex=todo.findIndex(e=>e.id===parseInt(req.params.id));
+  if(todoIndex===-1)
+    res.status(404).send("json not found");
+  else{
+    todo.splice(todoIndex,1);
+    res.status(200).json(todo[todoIndex]);
+  }
+})
+app.use(req,res)=>{
+  res.status(404).send("result not found");
+}
+app.listen(3000);
+
   
   module.exports = app;
